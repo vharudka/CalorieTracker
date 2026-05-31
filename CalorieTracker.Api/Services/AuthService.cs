@@ -1,43 +1,49 @@
-﻿using CalorieTracker.Api.Dtos;
+﻿using CalorieTracker.Api.Dtos.Auths;
 using CalorieTracker.Api.Helpers;
 using CalorieTracker.Api.Repositories;
 
-namespace CalorieTracker.Api.Services
+namespace CalorieTracker.Api.Services;
+
+public class AuthService : IAuthService
 {
-    public class AuthService : IAuthService
+    private readonly IUserRepository _repository;
+    private readonly IConfiguration _config;
+
+    public AuthService(IUserRepository repository, IConfiguration config)
     {
-        private readonly IUserRepository _repo;
-        private readonly IConfiguration _config;
+        _repository = repository;
+        _config = config;
+    }
 
-        public AuthService(IUserRepository repo, IConfiguration config)
+    public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+    {
+        var existing = await _repository.GetByEmailAsync(request.Email);
+        if (existing is not null)
         {
-            _repo = repo;
-            _config = config;
+            throw new Exception("Email already registered");
         }
 
-        public async Task<RegisterResponse> Register(RegisterRequest request)
+        var salt = PasswordHelper.GenerateSalt();
+        var hash = PasswordHelper.HashPassword(request.Password, salt);
+
+        var user = await _repository.CreateAsync(request.Email, hash, salt);
+        var token = JwtHelper.GenerateToken(user, _config);
+
+        return new AuthResponse(user.Id, user.Email, token);
+    }
+
+    public async Task<AuthResponse> LoginAsync(LoginRequest request)
+    {
+        var user = await _repository.GetByEmailAsync(request.Email) ?? throw new Exception("Invalid credentials");
+
+        var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
+        if (!valid)
         {
-            var salt = PasswordHelper.GenerateSalt();
-            var hash = PasswordHelper.HashPassword(request.Password, salt);
-
-            _ = await _repo.CreateUserAsync(request.Email, hash, salt);
-
-            return new RegisterResponse("Registration successful. You can now log in.");
+            throw new Exception("Invalid credentials");
         }
 
-        public async Task<LoginResponse> Login(LoginRequest request)
-        {
-            var user = await _repo.GetUserByEmailAsync(request.Email) ?? throw new Exception("Invalid credentials");
+        var token = JwtHelper.GenerateToken(user, _config);
 
-            var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
-            if (!valid)
-            {
-                throw new Exception("Invalid credentials");
-            }
-
-            var token = JwtHelper.GenerateToken(user.Id.ToString(), request.Email, _config);
-
-            return new LoginResponse(token, new UserDto(user.Id, user.Email));
-        }
+        return new AuthResponse(user.Id, user.Email, token);
     }
 }

@@ -1,10 +1,9 @@
-﻿using CalorieTracker.Api.Dtos;
+﻿using CalorieTracker.Api.Dtos.Auths;
 
-namespace CalorieTracker.Api.Services
+namespace CalorieTracker.Api.Services;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<RegisterResponse> Register(RegisterRequest request);
-        Task<LoginResponse> Login(LoginRequest request);
-    }
+    Task<AuthResponse> RegisterAsync(RegisterRequest request);
+    Task<AuthResponse> LoginAsync(LoginRequest request);
 }

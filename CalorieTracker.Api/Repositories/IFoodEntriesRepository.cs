@@ -4,7 +4,9 @@ namespace CalorieTracker.Api.Repositories;
 
 public interface IFoodEntriesRepository
 {
-    Task<FoodEntryResponse> CreateAsync(CreateFoodEntryRequest request);
-    Task<FoodEntryResponse> UpdateAsync(Guid id, UpdateFoodEntryRequest request);
-    Task DeleteAsync(Guid id);
+    Task<FoodEntryResponse> CreateAsync(CreateFoodEntryRequest request, Guid userId);
+    Task<FoodEntryResponse?> UpdateAsync(Guid id, Guid userId, UpdateFoodEntryRequest request);
+    Task<FoodEntryResponse?> GetAsync(Guid id, Guid userId);
+    Task<IReadOnlyList<FoodEntryResponse>> GetAllByUserAsync(Guid userId);
+    Task DeleteAsync(Guid id, Guid userId);
 }

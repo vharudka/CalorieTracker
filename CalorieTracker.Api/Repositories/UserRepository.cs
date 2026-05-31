@@ -13,15 +13,30 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public async Task<Guid> CreateUserAsync(string email, string hash, string salt)
+    public async Task<User?> GetByEmailAsync(string email)
     {
-        var sql = "SELECT sp_user_create(@email, @hash, @salt)";
-        return await _db.ExecuteScalarAsync<Guid>(sql, new { email, hash, salt });
+        return await _db.QuerySingleOrDefaultAsync<User>
+        (
+            "spGetUserByEmail",
+            new { Email = email },
+            commandType: CommandType.StoredProcedure
+        );
     }
 
-    public async Task<User?> GetUserByEmailAsync(string email)
+    public async Task<User> CreateAsync(string email, string passwordHash, string passwordSalt)
     {
-        var sql = "SELECT * FROM sp_user_get_by_email(@email)";
-        return await _db.QueryFirstOrDefaultAsync<User>(sql, new { email });
+        var id = Guid.NewGuid();
+
+        return await _db.QuerySingleAsync<User>(
+            "spCreateUser",
+            new
+            {
+                Id = id,
+                Email = email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            },
+            commandType: CommandType.StoredProcedure
+        );
     }
 }

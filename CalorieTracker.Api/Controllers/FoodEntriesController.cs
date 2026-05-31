@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.FoodEntries;
+using CalorieTracker.Api.Extensions;
 using CalorieTracker.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,23 +19,47 @@ public class FoodEntriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<FoodEntryResponse>> CreateAsync(CreateFoodEntryRequest request)
+    public async Task<ActionResult<FoodEntryResponse>> Create(CreateFoodEntryRequest request)
     {
-        var result = await _service.CreateAsync(request);
+        var userId = User.GetUserId();
+        var result = await _service.CreateAsync(request, userId);
+
         return Ok(result);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<ActionResult<FoodEntryResponse>> UpdateAsync(Guid id, UpdateFoodEntryRequest request)
+    public async Task<ActionResult<FoodEntryResponse>> Update(Guid id, UpdateFoodEntryRequest request)
     {
-        var result = await _service.UpdateAsync(id, request);
+        var userId = User.GetUserId();
+        var result = await _service.UpdateAsync(id, userId, request);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<FoodEntryResponse>> Get(Guid id)
+    {
+        var userId = User.GetUserId();
+        var result = await _service.GetAsync(id, userId);
+
+        return Ok(result);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<FoodEntryResponse>>> GetAll()
+    {
+        var userId = User.GetUserId();
+        var result = await _service.GetAllByUserAsync(userId);
+
         return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteAsync(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        await _service.DeleteAsync(id);
+        var userId = User.GetUserId();
+        await _service.DeleteAsync(id, userId);
+
         return NoContent();
     }
 }

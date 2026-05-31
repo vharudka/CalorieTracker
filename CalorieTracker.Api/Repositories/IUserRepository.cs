@@ -4,6 +4,6 @@ namespace CalorieTracker.Api.Repositories;
 
 public interface IUserRepository
 {
-    Task<Guid> CreateUserAsync(string email, string hash, string salt);
-    Task<User?> GetUserByEmailAsync(string email);
+    Task<User> CreateAsync(string email, string passwordHash, string passwordSalt);
+    Task<User?> GetByEmailAsync(string email);
 }

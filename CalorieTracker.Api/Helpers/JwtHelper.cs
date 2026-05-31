@@ -1,37 +1,34 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using CalorieTracker.Api.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace CalorieTracker.Api.Helpers
+namespace CalorieTracker.Api.Helpers;
+
+public static class JwtHelper
 {
-    public static class JwtHelper
+    public static string GenerateToken(User user, IConfiguration config)
     {
-        public static string GenerateToken(string userId, string email, IConfiguration config)
+        var jwt = config.GetSection("Jwt");
+
+        var claims = new[]
         {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(config["Jwt:Key"])
-            );
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(JwtRegisteredClaimNames.Email, email)
+            new Claim("id", user.Id.ToString()),
+            new Claim("email", user.Email)
         };
 
-            var token = new JwtSecurityToken(
-                issuer: config["Jwt:Issuer"],
-                audience: config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    int.Parse(config["Jwt:ExpiresMinutes"])
-                ),
-                signingCredentials: creds
-            );
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        var token = new JwtSecurityToken(
+            issuer: jwt["Issuer"],
+            audience: jwt["Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiresMinutes"]!)),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

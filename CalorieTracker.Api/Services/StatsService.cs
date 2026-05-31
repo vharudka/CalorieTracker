@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.Stats;
+using CalorieTracker.Api.Repositories;
 
 namespace CalorieTracker.Api.Services;
 

@@ -3,7 +3,6 @@ CREATE TABLE Users (
     Email NVARCHAR(255) NOT NULL UNIQUE,
     PasswordHash NVARCHAR(255) NOT NULL,
     PasswordSalt NVARCHAR(255) NOT NULL,
-    CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
 );
 
 CREATE TABLE FoodCache (
@@ -32,8 +31,8 @@ CREATE TABLE FoodEntries (
 CREATE TABLE UserGoals (
     UserId UNIQUEIDENTIFIER PRIMARY KEY REFERENCES Users(Id) ON DELETE CASCADE,
     DailyCalorieLimit INT NOT NULL,
-    UpdatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
 );
 
+CREATE INDEX IX_FoodCache_FoodName ON FoodCache(FoodName);
 CREATE INDEX IX_FoodCache_Barcode ON FoodCache(Barcode);
 CREATE INDEX IX_FoodEntries_UserId_EatenAt ON FoodEntries(UserId, EatenAt);

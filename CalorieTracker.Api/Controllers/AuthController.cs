@@ -1,4 +1,4 @@
-﻿using CalorieTracker.Api.Dtos;
+﻿using CalorieTracker.Api.Dtos.Auths;
 using CalorieTracker.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,31 +16,17 @@ namespace CalorieTracker.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
         {
-            try
-            {
-                var result = await _auth.Register(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var result = await _auth.RegisterAsync(request);
+            return Ok(result);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
         {
-            try
-            {
-                var result = await _auth.Login(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var result = await _auth.LoginAsync(request);
+            return Ok(result);
         }
     }
 }
