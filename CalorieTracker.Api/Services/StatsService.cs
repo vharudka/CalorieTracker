@@ -12,18 +12,59 @@ public class StatsService : IStatsService
         _repository = repository;
     }
 
-    public async Task<DailyStatsResponse> GetDailyAsync(DateTime date)
+    public async Task<DailyStatsResponse> GetDailyAsync(Guid userId, DateTime date)
     {
-        return await _repository.GetDailyAsync(date);
+        var raw = await _repository.GetDailyAsync(userId, date)
+            ?? throw new Exception("User goals not set");
+
+        var remaining = raw.DailyCalorieLimit - raw.TotalCalories;
+
+        return new DailyStatsResponse
+        (
+            Date: date.Date,
+            TotalCalories: raw.TotalCalories,
+            DailyCalorieLimit: raw.DailyCalorieLimit,
+            RemainingCalories: remaining,
+            Entries: raw.Entries
+        );
     }
 
-    public async Task<WeeklyStatsResponse> GetWeeklyAsync(DateTime weekStart)
+    public async Task<WeeklyStatsResponse> GetWeeklyAsync(Guid userId, DateTime date)
     {
-        return await _repository.GetWeeklyAsync(weekStart);
+        var weekStart = date.Date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+        var weekEnd = weekStart.AddDays(6);
+
+        var raw = await _repository.GetWeeklyAsync(userId, weekStart, weekEnd)
+            ?? throw new Exception("User goals not set");
+
+        var days = 7;
+
+        return new WeeklyStatsResponse
+        (
+            WeekStart: weekStart,
+            WeekEnd: weekEnd,
+            TotalCalories: raw.TotalCalories,
+            AverageCalories: raw.TotalCalories / days,
+            DailyCalorieLimit: raw.DailyCalorieLimit,
+            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories
+        );
     }
 
-    public async Task<MonthlyStatsResponse> GetMonthlyAsync(int year, int month)
+    public async Task<MonthlyStatsResponse> GetMonthlyAsync(Guid userId, int year, int month)
     {
-        return await _repository.GetMonthlyAsync(year, month);
+        var raw = await _repository.GetMonthlyAsync(userId, year, month)
+            ?? throw new Exception("User goals not set");
+
+        var days = DateTime.DaysInMonth(year, month);
+
+        return new MonthlyStatsResponse
+        (
+            Year: year,
+            Month: month,
+            TotalCalories: raw.TotalCalories,
+            AverageCalories: raw.TotalCalories / days,
+            DailyCalorieLimit: raw.DailyCalorieLimit,
+            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories
+        );
     }
 }

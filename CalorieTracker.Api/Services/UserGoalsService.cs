@@ -12,13 +12,13 @@ public class UserGoalsService : IUserGoalsService
         _repository = repository;
     }
 
-    public async Task<UserGoalsResponse> GetAsync()
+    public async Task<UserGoalsResponse?> GetAsync(Guid userId)
     {
-        return await _repository.GetAsync();
+        var entry = await _repository.GetAsync(userId);
+
+        return entry is null ? throw new Exception("User goal entry not found") : entry;
     }
 
-    public async Task<UserGoalsResponse> SetAsync(SetUserGoalsRequest request)
-    {
-        return await _repository.SetAsync(request);
-    }
+    public Task<UserGoalsResponse> UpsertAsync(Guid userId, SetUserGoalsRequest request)
+        => _repository.UpsertAsync(userId, request);
 }

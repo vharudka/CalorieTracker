@@ -4,7 +4,7 @@ namespace CalorieTracker.Api.Services;
 
 public interface IStatsService
 {
-    Task<DailyStatsResponse> GetDailyAsync(DateTime date);
-    Task<WeeklyStatsResponse> GetWeeklyAsync(DateTime weekStart);
-    Task<MonthlyStatsResponse> GetMonthlyAsync(int year, int month);
+    Task<DailyStatsResponse> GetDailyAsync(Guid userId, DateTime date);
+    Task<WeeklyStatsResponse> GetWeeklyAsync(Guid userId, DateTime date);
+    Task<MonthlyStatsResponse> GetMonthlyAsync(Guid userId, int year, int month);
 }

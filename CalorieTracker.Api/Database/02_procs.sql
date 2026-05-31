@@ -115,3 +115,101 @@ BEGIN
     WHERE UserId = @UserId
     ORDER BY EatenAt DESC;
 END
+
+GO
+
+CREATE PROCEDURE spUpsertUserGoals
+    @UserId UNIQUEIDENTIFIER,
+    @DailyCalorieLimit INT
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM UserGoals WHERE UserId = @UserId)
+    BEGIN
+        UPDATE UserGoals
+        SET DailyCalorieLimit = @DailyCalorieLimit
+        WHERE UserId = @UserId;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO UserGoals (UserId, DailyCalorieLimit)
+        VALUES (@UserId, @DailyCalorieLimit);
+    END
+
+    SELECT *
+    FROM UserGoals
+    WHERE UserId = @UserId;
+END
+
+GO
+
+CREATE PROCEDURE spGetUserGoals
+    @UserId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SELECT TOP 1 *
+    FROM UserGoals
+    WHERE UserId = @UserId;
+END
+
+GO
+
+CREATE PROCEDURE spGetDailyStats
+    @UserId UNIQUEIDENTIFIER,
+    @Date DATE
+AS
+BEGIN
+    SELECT 
+        ISNULL(SUM(Calories), 0) AS TotalCalories
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND CAST(EatenAt AS DATE) = @Date;
+
+    SELECT DailyCalorieLimit
+    FROM UserGoals
+    WHERE UserId = @UserId;
+
+    SELECT *
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND CAST(EatenAt AS DATE) = @Date
+    ORDER BY EatenAt DESC;
+END
+
+GO
+
+CREATE PROCEDURE spGetWeeklyStats
+    @UserId UNIQUEIDENTIFIER,
+    @StartDate DATE,
+    @EndDate DATE
+AS
+BEGIN
+    SELECT 
+        ISNULL(SUM(Calories), 0) AS TotalCalories
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND CAST(EatenAt AS DATE) BETWEEN @StartDate AND @EndDate;
+
+    SELECT DailyCalorieLimit
+    FROM UserGoals
+    WHERE UserId = @UserId;
+END
+
+GO
+
+CREATE PROCEDURE spGetMonthlyStats
+    @UserId UNIQUEIDENTIFIER,
+    @Year INT,
+    @Month INT
+AS
+BEGIN
+    SELECT 
+        ISNULL(SUM(Calories), 0) AS TotalCalories
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND YEAR(EatenAt) = @Year
+      AND MONTH(EatenAt) = @Month;
+
+    SELECT DailyCalorieLimit
+    FROM UserGoals
+    WHERE UserId = @UserId;
+END

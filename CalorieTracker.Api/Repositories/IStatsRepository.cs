@@ -1,10 +1,10 @@
-﻿using CalorieTracker.Api.Dtos.Stats;
+﻿using CalorieTracker.Api.Models;
 
 namespace CalorieTracker.Api.Repositories;
 
 public interface IStatsRepository
 {
-    Task<DailyStatsResponse> GetDailyAsync(DateTime date);
-    Task<WeeklyStatsResponse> GetWeeklyAsync(DateTime weekStart);
-    Task<MonthlyStatsResponse> GetMonthlyAsync(int year, int month);
+    Task<DailyStats?> GetDailyAsync(Guid userId, DateTime date);
+    Task<WeeklyStats?> GetWeeklyAsync(Guid userId, DateTime start, DateTime end);
+    Task<MonthlyStats?> GetMonthlyAsync(Guid userId, int year, int month);
 }

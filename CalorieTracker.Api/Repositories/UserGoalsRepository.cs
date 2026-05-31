@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.UserGoals;
+using Dapper;
 using System.Data;
 
 namespace CalorieTracker.Api.Repositories;
@@ -12,13 +13,27 @@ public class UserGoalsRepository : IUserGoalsRepository
         _db = db;
     }
 
-    public async Task<UserGoalsResponse> GetAsync()
+    public async Task<UserGoalsResponse?> GetAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        return await _db.QuerySingleOrDefaultAsync<UserGoalsResponse>
+        (
+            "spGetUserGoals",
+            new { UserId = userId },
+            commandType: CommandType.StoredProcedure
+        );
     }
 
-    public async Task<UserGoalsResponse> SetAsync(SetUserGoalsRequest request)
+    public async Task<UserGoalsResponse> UpsertAsync(Guid userId, SetUserGoalsRequest request)
     {
-        throw new NotImplementedException();
+        return await _db.QuerySingleAsync<UserGoalsResponse>
+        (
+            "spUpsertUserGoals",
+            new
+            {
+                UserId = userId,
+                request.DailyCalorieLimit
+            },
+            commandType: CommandType.StoredProcedure
+        );
     }
 }

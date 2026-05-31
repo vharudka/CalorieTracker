@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.UserGoals;
+using CalorieTracker.Api.Extensions;
 using CalorieTracker.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,22 @@ public class UserGoalsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<UserGoalsResponse>> GetAsync()
+    public async Task<ActionResult<UserGoalsResponse>> Get()
     {
-        var result = await _service.GetAsync();
-        return Ok(result);
+        var userId = User.GetUserId();
+
+        var goals = await _service.GetAsync(userId);
+
+        return Ok(goals);
     }
 
     [HttpPost]
-    public async Task<ActionResult<UserGoalsResponse>> SetAsync(SetUserGoalsRequest request)
+    public async Task<ActionResult<UserGoalsResponse>> Upsert(SetUserGoalsRequest request)
     {
-        var result = await _service.SetAsync(request);
+        var userId = User.GetUserId();
+
+        var result = await _service.UpsertAsync(userId, request);
+
         return Ok(result);
     }
 }

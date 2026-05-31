@@ -1,5 +1,6 @@
 ﻿namespace CalorieTracker.Api.Dtos.UserGoals;
 
-public record UserGoalsResponse(
+public record UserGoalsResponse
+(
     int DailyCalorieLimit
 );

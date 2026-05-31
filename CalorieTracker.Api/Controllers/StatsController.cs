@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.Stats;
+using CalorieTracker.Api.Extensions;
 using CalorieTracker.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,23 +19,32 @@ public class StatsController : ControllerBase
     }
 
     [HttpGet("daily")]
-    public async Task<ActionResult<DailyStatsResponse>> GetDailyAsync([FromQuery] DateTime date)
+    public async Task<ActionResult<DailyStatsResponse>> GetDaily([FromQuery] DateTime date)
     {
-        var result = await _service.GetDailyAsync(date);
+        var userId = User.GetUserId();
+
+        var result = await _service.GetDailyAsync(userId, date);
+
         return Ok(result);
     }
 
     [HttpGet("weekly")]
-    public async Task<ActionResult<WeeklyStatsResponse>> GetWeeklyAsync([FromQuery] DateTime weekStart)
+    public async Task<ActionResult<WeeklyStatsResponse>> GetWeekly([FromQuery] DateTime date)
     {
-        var result = await _service.GetWeeklyAsync(weekStart);
-        return Ok(result);
+        var userId = User.GetUserId();
+
+        var result = await _service.GetWeeklyAsync(userId, date);
+
+        return result;
     }
 
     [HttpGet("monthly")]
-    public async Task<ActionResult<MonthlyStatsResponse>> GetMonthlyAsync([FromQuery] MonthlyStatsRequest request)
+    public async Task<ActionResult<MonthlyStatsResponse>> GetMonthly([FromQuery] int year, [FromQuery] int month)
     {
-        var result = await _service.GetMonthlyAsync(request);
-        return Ok(result);
+        var userId = User.GetUserId();
+
+        var result = await _service.GetMonthlyAsync(userId, year, month);
+
+        return Ok();
     }
 }
