@@ -20,20 +20,20 @@ namespace CalorieTracker.Api.Services
             var salt = PasswordHelper.GenerateSalt();
             var hash = PasswordHelper.HashPassword(request.Password, salt);
 
-            var id = await _repo.CreateUser(request.Email, hash, salt);
+            _ = await _repo.CreateUserAsync(request.Email, hash, salt);
 
             return new RegisterResponse("Registration successful. You can now log in.");
         }
 
         public async Task<LoginResponse> Login(LoginRequest request)
         {
-            var user = await _repo.GetUserByEmail(request.Email);
-            if (user == null)
-                throw new Exception("Invalid credentials");
+            var user = await _repo.GetUserByEmailAsync(request.Email) ?? throw new Exception("Invalid credentials");
 
             var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
             if (!valid)
+            {
                 throw new Exception("Invalid credentials");
+            }
 
             var token = JwtHelper.GenerateToken(user.Id.ToString(), request.Email, _config);
 

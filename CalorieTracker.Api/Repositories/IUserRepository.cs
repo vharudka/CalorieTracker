@@ -1,10 +1,9 @@
 ﻿using CalorieTracker.Api.Models;
 
-namespace CalorieTracker.Api.Repositories
+namespace CalorieTracker.Api.Repositories;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<Guid> CreateUser(string email, string hash, string salt);
-        Task<User?> GetUserByEmail(string email);
-    }
+    Task<Guid> CreateUserAsync(string email, string hash, string salt);
+    Task<User?> GetUserByEmailAsync(string email);
 }
