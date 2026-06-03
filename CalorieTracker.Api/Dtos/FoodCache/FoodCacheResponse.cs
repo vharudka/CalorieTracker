@@ -2,11 +2,11 @@
 
 public record FoodCacheResponse
 (
-    Guid Id,
-    string FoodName,
-    string? Barcode,
-    int Calories,
+    string Name,
+    string Barcode,
+    decimal Calories,
     decimal Protein,
     decimal Fat,
-    decimal Carbohydrates
+    decimal Carbohydrates,
+    DateTime UpdatedAt
 );

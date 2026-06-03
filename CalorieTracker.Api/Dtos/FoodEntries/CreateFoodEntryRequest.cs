@@ -2,11 +2,7 @@
 
 public record CreateFoodEntryRequest
 (
-    string FoodName,
-    string? Barcode,
-    int Calories,
-    decimal Protein,
-    decimal Fat,
-    decimal Carbohydrates,
+    string Barcode,
+    decimal Grams,
     DateTime EatenAt
 );

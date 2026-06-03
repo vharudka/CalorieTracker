@@ -1,5 +1,13 @@
-﻿using CalorieTracker.Api.Repositories;
-using CalorieTracker.Api.Services;
+﻿using CalorieTracker.Api.Repositories.FoodCache;
+using CalorieTracker.Api.Repositories.FoodEntries;
+using CalorieTracker.Api.Repositories.Stats;
+using CalorieTracker.Api.Repositories.UserGoals;
+using CalorieTracker.Api.Repositories.Users;
+using CalorieTracker.Api.Services.Auths;
+using CalorieTracker.Api.Services.FoodCache;
+using CalorieTracker.Api.Services.FoodEntries;
+using CalorieTracker.Api.Services.Stats;
+using CalorieTracker.Api.Services.UserGoals;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;

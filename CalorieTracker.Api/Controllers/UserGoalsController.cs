@@ -1,6 +1,6 @@
 ﻿using CalorieTracker.Api.Dtos.UserGoals;
 using CalorieTracker.Api.Extensions;
-using CalorieTracker.Api.Services;
+using CalorieTracker.Api.Services.UserGoals;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.FoodCache;
-using CalorieTracker.Api.Services;
+using CalorieTracker.Api.Services.FoodCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +18,10 @@ public class FoodCacheController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<SearchFoodResponse>> SearchAsync([FromQuery] string query)
+    public async Task<ActionResult<FoodCacheResponse?>> GetAsync([FromQuery] FoodCacheRequest request)
     {
-        var result = await _service.SearchAsync(query);
+        var result = await _service.GetAsync(request.Barcode);
+
         return Ok(result);
     }
 }

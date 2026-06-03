@@ -1,5 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.Auths;
-using CalorieTracker.Api.Services;
+using CalorieTracker.Api.Services.Auths;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalorieTracker.Api.Controllers

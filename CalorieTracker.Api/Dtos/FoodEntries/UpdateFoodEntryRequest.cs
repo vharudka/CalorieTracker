@@ -2,11 +2,7 @@
 
 public record UpdateFoodEntryRequest
 (
-    string FoodName,
-    string? Barcode,
-    int Calories,
-    decimal Protein,
-    decimal Fat,
-    decimal Carbohydrates,
+    string Barcode,
+    int Grams,
     DateTime EatenAt
 );
