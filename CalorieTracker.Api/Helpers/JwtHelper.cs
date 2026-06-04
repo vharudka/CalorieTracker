@@ -15,7 +15,7 @@ public static class JwtHelper
         var claims = new[]
         {
             new Claim("id", user.Id.ToString()),
-            new Claim("email", user.Email)
+            new Claim("username", user.Username)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));

@@ -1,10 +1,13 @@
 ﻿namespace CalorieTracker.Api.Dtos.FoodEntries;
 
-public record FoodEntryResponse(
+public record FoodEntryResponse
+(
     Guid Id,
-    string FoodName,
-    string? Barcode,
-    int Calories,
+    Guid UserId,
+    string Name,
+    string Barcode,
+    decimal Grams,
+    decimal Calories,
     decimal Protein,
     decimal Fat,
     decimal Carbohydrates,

@@ -13,17 +13,17 @@ public class UserRepository : IUserRepository
         _db = db;
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<User?> GetByUsernameAsync(string username)
     {
         return await _db.QuerySingleOrDefaultAsync<User>
         (
-            "spGetUserByEmail",
-            new { Email = email },
+            "spGetUserByUsername",
+            new { Username = username },
             commandType: CommandType.StoredProcedure
         );
     }
 
-    public async Task<User> CreateAsync(string email, string passwordHash, string passwordSalt)
+    public async Task<User> CreateAsync(string username, string passwordHash, string passwordSalt)
     {
         var id = Guid.NewGuid();
 
@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
             new
             {
                 Id = id,
-                Email = email,
+                Username = username,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             },

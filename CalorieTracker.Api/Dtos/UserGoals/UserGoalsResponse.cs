@@ -2,5 +2,6 @@
 
 public record UserGoalsResponse
 (
+    Guid UserId,
     int DailyCalorieLimit
 );

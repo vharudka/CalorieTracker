@@ -3,7 +3,7 @@
 public record User
 (
     Guid Id,
-    string Email,
+    string Username,
     string PasswordHash,
     string PasswordSalt
 );

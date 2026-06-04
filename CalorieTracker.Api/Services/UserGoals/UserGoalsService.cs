@@ -21,7 +21,7 @@ public class UserGoalsService : IUserGoalsService
         var result = await _cache.GetOrCreateAsync
         (
             CacheKeys.UserGoals(userId),
-            TimeSpan.FromMinutes(30),
+            TimeSpan.FromHours(24),
             () => _repository.GetAsync(userId)
         );
 

@@ -1,27 +1,27 @@
 CREATE PROCEDURE spCreateUser
     @Id UNIQUEIDENTIFIER,
-    @Email NVARCHAR(255),
+    @Username NVARCHAR(255),
     @PasswordHash NVARCHAR(255),
     @PasswordSalt NVARCHAR(255)
 AS
 BEGIN
-    INSERT INTO Users (Id, Email, PasswordHash, PasswordSalt)
-    VALUES (@Id, @Email, @PasswordHash, @PasswordSalt);
+    INSERT INTO Users (Id, Username, PasswordHash, PasswordSalt)
+    VALUES (@Id, @Username, @PasswordHash, @PasswordSalt);
 
-    SELECT Id, Email, PasswordHash, PasswordSalt
+    SELECT Id, Username, PasswordHash, PasswordSalt
     FROM Users
     WHERE Id = @Id;
 END
 
 GO
 
-CREATE PROCEDURE spGetUserByEmail
-    @Email NVARCHAR(255)
+CREATE PROCEDURE spGetUserByUsername
+    @Username NVARCHAR(255)
 AS
 BEGIN
-    SELECT TOP 1 Id, Email, PasswordHash, PasswordSalt
+    SELECT TOP 1 Id, Username, PasswordHash, PasswordSalt
     FROM Users
-    WHERE Email = @Email;
+    WHERE Username = @Username;
 END
 
 GO
@@ -40,7 +40,7 @@ CREATE PROCEDURE spCreateFoodEntry
 AS
 BEGIN
     INSERT INTO FoodEntries (
-        Id, UserId, Name, Barcode, Grams,  Calories, Protein, Fat, Carbohydrates, EatenAt
+        Id, UserId, Name, Barcode, Grams, Calories, Protein, Fat, Carbohydrates, EatenAt
     )
     VALUES (
         @Id, @UserId, @Name, @Barcode, @Grams, @Calories, @Protein, @Fat, @Carbohydrates, @EatenAt
@@ -105,6 +105,17 @@ BEGIN
     FROM FoodEntries
     WHERE UserId = @UserId
     ORDER BY EatenAt DESC;
+END
+
+GO
+
+CREATE PROCEDURE spDeleteFoodEntry
+    @Id UNIQUEIDENTIFIER,
+    @UserId UNIQUEIDENTIFIER
+AS
+BEGIN
+    DELETE FROM FoodEntries
+    WHERE Id = @Id AND UserId = @UserId;
 END
 
 GO
@@ -216,7 +227,8 @@ BEGIN
            Calories,
            Protein,
            Fat,
-           Carbohydrates
+           Carbohydrates,
+           UpdatedAt
     FROM FoodCache
     WHERE Barcode = @Barcode;
 END
@@ -229,18 +241,20 @@ CREATE PROCEDURE spInsertFoodCache
     @Calories DECIMAL(10,2),
     @Protein DECIMAL(10,2),
     @Fat DECIMAL(10,2),
-    @Carbohydrates DECIMAL(10,2)
+    @Carbohydrates DECIMAL(10,2),
+    @UpdatedAt DATETIME2
 AS
 BEGIN
-    INSERT INTO FoodCache (Name, Barcode, Calories, Protein, Fat, Carbohydrates)
-    VALUES (@Name, @Barcode, @Calories, @Protein, @Fat, @Carbohydrates);
+    INSERT INTO FoodCache (Name, Barcode, Calories, Protein, Fat, Carbohydrates, UpdatedAt)
+    VALUES (@Name, @Barcode, @Calories, @Protein, @Fat, @Carbohydrates, @UpdatedAt);
 
     SELECT Name,
            Barcode,
            Calories,
            Protein,
            Fat,
-           Carbohydrates
+           Carbohydrates,
+           UpdatedAt
     FROM FoodCache
     WHERE Barcode = @Barcode;
 END

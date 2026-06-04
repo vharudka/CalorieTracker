@@ -1,11 +1,13 @@
 ﻿using CalorieTracker.Api.Repositories.FoodCache;
 using CalorieTracker.Api.Repositories.FoodEntries;
+using CalorieTracker.Api.Repositories.OpenFoodFacts;
 using CalorieTracker.Api.Repositories.Stats;
 using CalorieTracker.Api.Repositories.UserGoals;
 using CalorieTracker.Api.Repositories.Users;
 using CalorieTracker.Api.Services.Auths;
 using CalorieTracker.Api.Services.FoodCache;
 using CalorieTracker.Api.Services.FoodEntries;
+using CalorieTracker.Api.Services.MemoryCache;
 using CalorieTracker.Api.Services.Stats;
 using CalorieTracker.Api.Services.UserGoals;
 using Microsoft.Data.SqlClient;
@@ -72,6 +74,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IMemoryCacheService, MemoryCacheService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IFoodCacheService, FoodCacheService>();
         services.AddScoped<IFoodEntriesService, FoodEntriesService>();
@@ -86,6 +89,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IFoodCacheRepository, FoodCacheRepository>();
         services.AddScoped<IFoodEntriesRepository, FoodEntriesRepository>();
+        services.AddScoped<IOpenFoodFactsRepository, OpenFoodFactsRepository>();
         services.AddScoped<IUserGoalsRepository, UserGoalsRepository>();
         services.AddScoped<IStatsRepository, StatsRepository>();
 

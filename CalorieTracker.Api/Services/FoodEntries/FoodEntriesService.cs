@@ -47,7 +47,7 @@ public class FoodEntriesService : IFoodEntriesService
 
         var foodEntry = new FoodEntry
         (
-            Guid.NewGuid(),
+            id,
             userId,
             foodCache.Name,
             foodCache.Barcode,

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CalorieTracker.Api.Controllers;
 
 [ApiController]
-[Route("user-goals")]
+[Route("api/user-goals")]
 [Authorize]
 public class UserGoalsController : ControllerBase
 {

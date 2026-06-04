@@ -17,24 +17,24 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
-        var existing = await _repository.GetByEmailAsync(request.Email);
+        var existing = await _repository.GetByUsernameAsync(request.Username);
         if (existing is not null)
         {
-            throw new Exception("Email already registered");
+            throw new Exception("Username already registered");
         }
 
         var salt = PasswordHelper.GenerateSalt();
         var hash = PasswordHelper.HashPassword(request.Password, salt);
 
-        var user = await _repository.CreateAsync(request.Email, hash, salt);
+        var user = await _repository.CreateAsync(request.Username, hash, salt);
         var token = JwtHelper.GenerateToken(user, _config);
 
-        return new AuthResponse(user.Id, user.Email, token);
+        return new AuthResponse(user.Id, user.Username, token);
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await _repository.GetByEmailAsync(request.Email) ?? throw new Exception("Invalid credentials");
+        var user = await _repository.GetByUsernameAsync(request.Username) ?? throw new Exception("Invalid credentials");
 
         var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
         if (!valid)
@@ -44,6 +44,6 @@ public class AuthService : IAuthService
 
         var token = JwtHelper.GenerateToken(user, _config);
 
-        return new AuthResponse(user.Id, user.Email, token);
+        return new AuthResponse(user.Id, user.Username, token);
     }
 }
