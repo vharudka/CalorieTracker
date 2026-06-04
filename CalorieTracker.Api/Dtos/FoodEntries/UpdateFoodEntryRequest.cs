@@ -3,6 +3,6 @@
 public record UpdateFoodEntryRequest
 (
     string Barcode,
-    int Grams,
+    decimal Grams,
     DateTime EatenAt
 );

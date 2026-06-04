@@ -265,6 +265,7 @@ GRANT EXECUTE ON OBJECT::dbo.spCreateFoodEntry TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spUpdateFoodEntry TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spGetFoodEntry TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spGetFoodEntriesByUser TO CalorieTrackerRole;
+GRANT EXECUTE ON OBJECT::dbo.spDeleteFoodEntry TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spUpsertUserGoals TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spGetUserGoals TO CalorieTrackerRole;
 GRANT EXECUTE ON OBJECT::dbo.spGetDailyStats TO CalorieTrackerRole;
