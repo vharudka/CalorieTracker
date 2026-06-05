@@ -1,9 +1,11 @@
 using CalorieTracker.Api.Extensions;
+using FluentValidation;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
+services.AddValidatorsFromAssemblyContaining<Program>();
 services.AddHttpClient();
 services.AddMemoryCache();
 services.AddControllers();
