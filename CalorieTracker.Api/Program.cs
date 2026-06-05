@@ -5,7 +5,9 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
+var config = builder.Configuration;
 
+services.AddCacheOptions(config);
 services.AddValidatorsFromAssemblyContaining<Program>();
 services.AddHttpClient();
 services.AddMemoryCache();
@@ -13,8 +15,8 @@ services.AddControllers();
 services.AddOpenApi();
 
 services.AddFrontendCors();
-services.AddJwtAuthentication(builder.Configuration);
-services.AddDatabase(builder.Configuration);
+services.AddJwtAuthentication(config);
+services.AddDatabase(config);
 services.AddServices();
 services.AddRepositories();
 

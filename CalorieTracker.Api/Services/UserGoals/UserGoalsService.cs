@@ -3,6 +3,7 @@ using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Helpers;
 using CalorieTracker.Api.Repositories.UserGoals;
 using CalorieTracker.Api.Services.MemoryCache;
+using CalorieTracker.Api.Settings;
 
 namespace CalorieTracker.Api.Services.UserGoals;
 
@@ -10,11 +11,18 @@ public class UserGoalsService : IUserGoalsService
 {
     private readonly IUserGoalsRepository _repository;
     private readonly IMemoryCacheService _cache;
+    private readonly TimeSpan _cacheExpiration;
 
-    public UserGoalsService(IUserGoalsRepository repository, IMemoryCacheService cache)
+    public UserGoalsService
+    (
+        IUserGoalsRepository repository,
+        IMemoryCacheService cache,
+        CacheOptions cacheOptions
+    )
     {
         _repository = repository;
         _cache = cache;
+        _cacheExpiration = cacheOptions.UserGoalsCacheExpiration;
     }
 
     public async Task<UserGoalsResponse?> GetAsync(Guid userId)
@@ -22,7 +30,7 @@ public class UserGoalsService : IUserGoalsService
         var result = await _cache.GetOrCreateAsync
         (
             CacheKeys.UserGoals(userId),
-            TimeSpan.FromHours(24),
+            _cacheExpiration,
             () => _repository.GetAsync(userId)
         );
 

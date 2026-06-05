@@ -10,7 +10,9 @@ using CalorieTracker.Api.Services.FoodEntries;
 using CalorieTracker.Api.Services.MemoryCache;
 using CalorieTracker.Api.Services.Stats;
 using CalorieTracker.Api.Services.UserGoals;
+using CalorieTracker.Api.Settings;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Text;
@@ -19,6 +21,16 @@ namespace CalorieTracker.Api.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddCacheOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<CacheOptions>(configuration.GetSection("CacheOptions"));
+
+        services.AddSingleton(resolver =>
+            resolver.GetRequiredService<IOptions<CacheOptions>>().Value);
+
+        return services;
+    }
+
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration config)
     {
         services.AddScoped<IDbConnection>(_ =>
