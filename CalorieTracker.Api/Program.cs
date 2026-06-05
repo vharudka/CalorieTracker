@@ -1,3 +1,4 @@
+using CalorieTracker.Api;
 using CalorieTracker.Api.Extensions;
 using FluentValidation;
 using Scalar.AspNetCore;
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors("AllowFrontend");
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

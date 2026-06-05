@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.Auths;
+using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Helpers;
 using CalorieTracker.Api.Repositories.Users;
 
@@ -20,7 +21,7 @@ public class AuthService : IAuthService
         var existing = await _repository.GetByUsernameAsync(request.Username);
         if (existing is not null)
         {
-            throw new Exception("Username already registered");
+            throw new UsernameAlreadyExistsException(request.Username);
         }
 
         var salt = PasswordHelper.GenerateSalt();
@@ -39,7 +40,7 @@ public class AuthService : IAuthService
         var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
         if (!valid)
         {
-            throw new Exception("Invalid credentials");
+            throw new InvalidCredentialsException();
         }
 
         var token = JwtHelper.GenerateToken(user, _config);

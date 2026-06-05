@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.Stats;
+using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Repositories.Stats;
 
 namespace CalorieTracker.Api.Services.Stats;
@@ -16,7 +17,7 @@ public class StatsService : IStatsService
     {
         var date = request.Date;
         var raw = await _repository.GetDailyAsync(userId, date)
-            ?? throw new Exception("User goals not set");
+            ?? throw new UserGoalsNotFoundException(userId);
 
         var remaining = raw.DailyCalorieLimit - raw.TotalCalories;
 
@@ -37,7 +38,7 @@ public class StatsService : IStatsService
         var weekEnd = weekStart.AddDays(6);
 
         var raw = await _repository.GetWeeklyAsync(userId, weekStart, weekEnd)
-            ?? throw new Exception("User goals not set");
+            ?? throw new UserGoalsNotFoundException(userId);
 
         var days = 7;
 
@@ -58,7 +59,7 @@ public class StatsService : IStatsService
         var month = request.Month;
 
         var raw = await _repository.GetMonthlyAsync(userId, year, month)
-            ?? throw new Exception("User goals not set");
+            ?? throw new UserGoalsNotFoundException(userId);
 
         var days = DateTime.DaysInMonth(year, month);
 

@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.FoodEntries;
+using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Models;
 using CalorieTracker.Api.Repositories.FoodEntries;
 using CalorieTracker.Api.Services.FoodCache;
@@ -66,7 +67,7 @@ public class FoodEntriesService : IFoodEntriesService
     {
         var entry = await _repository.GetAsync(id, userId);
 
-        return entry ?? throw new Exception("Food entry not found");
+        return entry ?? throw new FoodEntryNotFoundException(userId);
     }
 
     public Task<IReadOnlyList<FoodEntryResponse>> GetAllByUserAsync(Guid userId)

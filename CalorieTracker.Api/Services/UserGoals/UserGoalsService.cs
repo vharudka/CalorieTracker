@@ -1,4 +1,5 @@
 ﻿using CalorieTracker.Api.Dtos.UserGoals;
+using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Helpers;
 using CalorieTracker.Api.Repositories.UserGoals;
 using CalorieTracker.Api.Services.MemoryCache;
@@ -25,7 +26,7 @@ public class UserGoalsService : IUserGoalsService
             () => _repository.GetAsync(userId)
         );
 
-        return result ?? throw new Exception("User goal entry not found");
+        return result ?? throw new UserGoalsNotFoundException(userId);
     }
 
     public Task<UserGoalsResponse> UpsertAsync(Guid userId, SetUserGoalsRequest request)
