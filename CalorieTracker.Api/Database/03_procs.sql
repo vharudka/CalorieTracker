@@ -185,8 +185,24 @@ CREATE PROCEDURE spGetWeeklyStats
     @EndDate DATE
 AS
 BEGIN
+    SELECT ISNULL(SUM(Calories), 0) AS TotalCalories
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND CAST(EatenAt AS DATE) BETWEEN @StartDate AND @EndDate;
+
     SELECT 
-        ISNULL(SUM(Calories), 0) AS TotalCalories
+		DAY(EatenAt) AS Day,
+		ISNULL(SUM(Calories), 0) AS Calories
+	FROM FoodEntries
+	WHERE UserId = @UserId
+	  AND CAST(EatenAt AS DATE) BETWEEN @StartDate AND @EndDate
+	GROUP BY DAY(EatenAt)
+	ORDER BY Day;
+
+    SELECT 
+        ISNULL(SUM(Protein), 0) AS TotalProtein,
+        ISNULL(SUM(Fat), 0) AS TotalFat,
+        ISNULL(SUM(Carbohydrates), 0) AS TotalCarbohydrates
     FROM FoodEntries
     WHERE UserId = @UserId
       AND CAST(EatenAt AS DATE) BETWEEN @StartDate AND @EndDate;
@@ -204,8 +220,26 @@ CREATE PROCEDURE spGetMonthlyStats
     @Month INT
 AS
 BEGIN
+    SELECT ISNULL(SUM(Calories), 0) AS TotalCalories
+    FROM FoodEntries
+    WHERE UserId = @UserId
+      AND YEAR(EatenAt) = @Year
+      AND MONTH(EatenAt) = @Month;
+
     SELECT 
-        ISNULL(SUM(Calories), 0) AS TotalCalories
+		DAY(EatenAt) AS Day,
+		ISNULL(SUM(Calories), 0) AS Calories
+	FROM FoodEntries
+	WHERE UserId = @UserId
+	  AND YEAR(EatenAt) = @Year
+	  AND MONTH(EatenAt) = @Month
+	GROUP BY DAY(EatenAt)
+	ORDER BY Day;
+
+    SELECT 
+        ISNULL(SUM(Protein), 0) AS TotalProtein,
+        ISNULL(SUM(Fat), 0) AS TotalFat,
+        ISNULL(SUM(Carbohydrates), 0) AS TotalCarbohydrates
     FROM FoodEntries
     WHERE UserId = @UserId
       AND YEAR(EatenAt) = @Year
