@@ -32,6 +32,7 @@ public class ExceptionHandlingMiddleware
 
                 case UserGoalsNotFoundException:
                 case FoodEntryNotFoundException:
+                case FoodCacheNotFoundException:
                     _logger.LogWarning(ex, ex.Message);
                     context.Response.StatusCode = StatusCodes.Status404NotFound;
                     break;

@@ -51,15 +51,20 @@ public class StatsRepository : IStatsRepository
             commandType: CommandType.StoredProcedure
         );
 
-        var total = await multi.ReadSingleOrDefaultAsync<int?>();
-        if (total is null)
-        {
-            return null;
-        }
+        var totalCalories = await multi.ReadSingleAsync<int>();
+        var dailyCalories = (await multi.ReadAsync<DailyCalories>()).ToList();
+        var macros = await multi.ReadSingleAsync<Macros>();
+        var dailyLimit = await multi.ReadSingleAsync<int>();
 
-        var limit = await multi.ReadSingleAsync<int>();
-
-        return new WeeklyStats(total.Value, limit);
+        return new WeeklyStats
+        (
+            TotalCalories: totalCalories,
+            DailyCalorieLimit: dailyLimit,
+            DailyCalories: dailyCalories.Select(x => x.Calories).ToList(),
+            TotalProtein: macros.TotalProtein,
+            TotalFat: macros.TotalFat,
+            TotalCarbohydrates: macros.TotalCarbohydrates
+        );
     }
 
     public async Task<MonthlyStats?> GetMonthlyAsync(Guid userId, int year, int month)
@@ -76,14 +81,19 @@ public class StatsRepository : IStatsRepository
             commandType: CommandType.StoredProcedure
         );
 
-        var total = await multi.ReadSingleOrDefaultAsync<int?>();
-        if (total is null)
-        {
-            return null;
-        }
+        var totalCalories = await multi.ReadSingleAsync<int>();
+        var dailyCalories = (await multi.ReadAsync<DailyCalories>()).ToList();
+        var macros = await multi.ReadSingleAsync<Macros>();
+        var dailyLimit = await multi.ReadSingleAsync<int>();
 
-        var limit = await multi.ReadSingleAsync<int>();
-
-        return new MonthlyStats(total.Value, limit);
+        return new MonthlyStats
+        (
+            TotalCalories: totalCalories,
+            DailyCalorieLimit: dailyLimit,
+            DailyCalories: dailyCalories.Select(x => x.Calories).ToList(),
+            TotalProtein: macros.TotalProtein,
+            TotalFat: macros.TotalFat,
+            TotalCarbohydrates: macros.TotalCarbohydrates
+        );
     }
 }

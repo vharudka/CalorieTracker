@@ -7,5 +7,9 @@ public record MonthlyStatsResponse
     int TotalCalories,
     int AverageCalories,
     int DailyCalorieLimit,
-    int RemainingCalories
+    int RemainingCalories,
+    IReadOnlyList<int> DailyCalories,
+    int TotalProtein,
+    int TotalFat,
+    int TotalCarbohydrates
 );

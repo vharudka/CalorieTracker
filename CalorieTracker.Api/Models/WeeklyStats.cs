@@ -3,5 +3,9 @@
 public record WeeklyStats
 (
     int TotalCalories,
-    int DailyCalorieLimit
+    int DailyCalorieLimit,
+    IReadOnlyList<int> DailyCalories,
+    int TotalProtein,
+    int TotalFat,
+    int TotalCarbohydrates
 );

@@ -19,7 +19,7 @@ public class FoodEntriesService : IFoodEntriesService
 
     public async Task<FoodEntryResponse> CreateAsync(CreateFoodEntryRequest request, Guid userId)
     {
-        var foodCache = await _foodCache.GetAsync(request.Barcode) ?? throw new Exception("Food cache not found");
+        var foodCache = await _foodCache.GetAsync(request.Barcode) ?? throw new FoodCacheNotFoundException(request.Barcode);
 
         var factor = request.Grams / 100m;
 
@@ -42,7 +42,7 @@ public class FoodEntriesService : IFoodEntriesService
 
     public async Task<FoodEntryResponse> UpdateAsync(Guid id, Guid userId, UpdateFoodEntryRequest request)
     {
-        var foodCache = await _foodCache.GetAsync(request.Barcode) ?? throw new Exception("Food cache not found");
+        var foodCache = await _foodCache.GetAsync(request.Barcode) ?? throw new FoodCacheNotFoundException(request.Barcode);
 
         var factor = request.Grams / 100m;
 

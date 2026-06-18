@@ -49,7 +49,11 @@ public class StatsService : IStatsService
             TotalCalories: raw.TotalCalories,
             AverageCalories: raw.TotalCalories / days,
             DailyCalorieLimit: raw.DailyCalorieLimit,
-            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories
+            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories,
+            DailyCalories: raw.DailyCalories,
+            TotalProtein: raw.TotalProtein,
+            TotalFat: raw.TotalFat,
+            TotalCarbohydrates: raw.TotalCarbohydrates
         );
     }
 
@@ -70,7 +74,11 @@ public class StatsService : IStatsService
             TotalCalories: raw.TotalCalories,
             AverageCalories: raw.TotalCalories / days,
             DailyCalorieLimit: raw.DailyCalorieLimit,
-            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories
+            RemainingCalories: raw.DailyCalorieLimit * days - raw.TotalCalories,
+            DailyCalories: raw.DailyCalories,
+            TotalProtein: raw.TotalProtein,
+            TotalFat: raw.TotalFat,
+            TotalCarbohydrates: raw.TotalCarbohydrates
         );
     }
 }
