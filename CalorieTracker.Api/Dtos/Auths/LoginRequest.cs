@@ -4,4 +4,4 @@ public record LoginRequest
 (
     string Username,
     string Password
-);
+) : AuthRequest(Username, Password);

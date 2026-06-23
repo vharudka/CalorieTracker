@@ -1,22 +1,13 @@
 ﻿using CalorieTracker.Api.Dtos.Auths;
-using FluentValidation;
+using CalorieTracker.Api.Options;
+using Microsoft.Extensions.Options;
 
 namespace CalorieTracker.Api.Validators.Auths;
 
-public class LoginRequestValidator : AbstractValidator<LoginRequest>
+public class LoginRequestValidator : AuthValidator<LoginRequest>
 {
-    public LoginRequestValidator()
+    public LoginRequestValidator(IOptions<PasswordValidationOptions> options)
+        : base(options)
     {
-        RuleFor(x => x.Username)
-            .NotEmpty()
-            .WithMessage("Username is required.")
-            .MinimumLength(3)
-            .WithMessage("Username must be at least 3 characters long.");
-
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .WithMessage("Password is required.")
-            .MinimumLength(3)
-            .WithMessage("Password must be at least 6 characters long.");
     }
 }

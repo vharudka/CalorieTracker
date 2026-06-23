@@ -1,7 +1,7 @@
 ﻿namespace CalorieTracker.Api.Dtos.Auths;
 
-public record RegisterRequest
+public record AuthRequest
 (
     string Username,
     string Password
-) : AuthRequest(Username, Password);
+);
