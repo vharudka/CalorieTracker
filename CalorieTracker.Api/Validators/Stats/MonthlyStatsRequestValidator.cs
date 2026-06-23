@@ -7,12 +7,12 @@ public class MonthlyStatsRequestValidator : AbstractValidator<MonthlyStatsReques
 {
     public MonthlyStatsRequestValidator()
     {
-        RuleFor(x => x.Month)
+        RuleFor(x => x.Year)
             .GreaterThan(0)
-            .WithMessage("Month is required.");
+            .WithMessage("Year is required.");
 
         RuleFor(x => x.Month)
-            .GreaterThan(0)
-            .WithMessage("Month is required.");
+            .InclusiveBetween(1, 12)
+            .WithMessage("Month must be between 1 and 12.");
     }
 }

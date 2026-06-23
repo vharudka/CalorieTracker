@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="CalorieTracker.Api.Tests/CalorieTracker.Api.Tests.csproj" Id="44701b6e-a575-4143-b6ef-167bfbe830f3" />
   <Project Path="CalorieTracker.Api/CalorieTracker.Api.csproj" />
 </Solution>

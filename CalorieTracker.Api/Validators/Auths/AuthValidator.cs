@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace CalorieTracker.Api.Validators.Auths;
 
-public class AuthValidator<T> : AbstractValidator<T>
+public abstract class AuthValidator<T> : AbstractValidator<T>
     where T : AuthRequest
 {
     protected AuthValidator(IOptions<PasswordValidationOptions> options)

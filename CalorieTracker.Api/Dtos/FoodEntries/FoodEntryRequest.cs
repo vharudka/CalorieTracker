@@ -1,8 +1,8 @@
 ﻿namespace CalorieTracker.Api.Dtos.FoodEntries;
 
-public record CreateFoodEntryRequest
+public record FoodEntryRequest
 (
     string Barcode,
     decimal Grams,
     DateTime EatenAt
-) : FoodEntryRequest(Barcode, Grams, EatenAt);
+);

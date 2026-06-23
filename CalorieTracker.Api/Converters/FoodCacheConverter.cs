@@ -16,11 +16,25 @@ public static class FoodCacheConverter
         (
             offProductResponse.Product?.ProductName ?? "Unknown",
             offProductResponse.Code,
-            nutrients?["energy-kcal"]?.Value ?? 0,
-            nutrients?["proteins"]?.Value ?? 0,
-            nutrients?["fat"]?.Value ?? 0,
-            nutrients?["carbohydrates"]?.Value ?? 0,
+            GetNutrient(nutrients, "energy-kcal"),
+            GetNutrient(nutrients, "proteins"),
+            GetNutrient(nutrients, "fat"),
+            GetNutrient(nutrients, "carbohydrates"),
             DateTime.UtcNow
         );
+    }
+
+    private static decimal GetNutrient
+    (
+        Dictionary<string, OffNutrient>? nutrients,
+        string key
+    )
+    {
+        if (nutrients != null && nutrients.TryGetValue(key, out var nutrient))
+        {
+            return nutrient.Value;
+        }
+
+        return 0;
     }
 }
