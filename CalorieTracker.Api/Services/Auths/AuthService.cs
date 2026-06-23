@@ -1,6 +1,8 @@
 ﻿using CalorieTracker.Api.Dtos.Auths;
+using CalorieTracker.Api.Dtos.UserGoals;
 using CalorieTracker.Api.Exceptions;
 using CalorieTracker.Api.Helpers;
+using CalorieTracker.Api.Repositories.UserGoals;
 using CalorieTracker.Api.Repositories.Users;
 
 namespace CalorieTracker.Api.Services.Auths;
@@ -8,11 +10,18 @@ namespace CalorieTracker.Api.Services.Auths;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _repository;
+    private readonly IUserGoalsRepository _userGoalsRepository;
     private readonly IConfiguration _config;
 
-    public AuthService(IUserRepository repository, IConfiguration config)
+    public AuthService
+    (
+        IUserRepository repository,
+        IUserGoalsRepository userGoalsRepository,
+        IConfiguration config
+    )
     {
         _repository = repository;
+        _userGoalsRepository = userGoalsRepository;
         _config = config;
     }
 
@@ -29,6 +38,8 @@ public class AuthService : IAuthService
 
         var user = await _repository.CreateAsync(request.Username, hash, salt);
         var token = JwtHelper.GenerateToken(user, _config);
+
+        await _userGoalsRepository.UpsertAsync(user.Id, new SetUserGoalsRequest(2000));
 
         return new AuthResponse(user.Id, user.Username, token);
     }
