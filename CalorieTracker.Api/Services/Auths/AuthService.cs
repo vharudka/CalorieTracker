@@ -35,7 +35,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await _repository.GetByUsernameAsync(request.Username) ?? throw new Exception("Invalid credentials");
+        var user = await _repository.GetByUsernameAsync(request.Username) ?? throw new InvalidCredentialsException();
 
         var valid = PasswordHelper.Verify(request.Password, user.PasswordSalt, user.PasswordHash);
         if (!valid)
