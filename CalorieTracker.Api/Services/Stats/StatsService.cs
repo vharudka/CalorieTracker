@@ -20,6 +20,9 @@ public class StatsService : IStatsService
             ?? throw new UserGoalsNotFoundException(userId);
 
         var remaining = raw.DailyCalorieLimit - raw.TotalCalories;
+        var totalProtein = (int)Math.Round(raw.Entries.Sum(e => e.Protein));
+        var totalFat = (int)Math.Round(raw.Entries.Sum(e => e.Fat));
+        var totalCarbs = (int)Math.Round(raw.Entries.Sum(e => e.Carbohydrates));
 
         return new DailyStatsResponse
         (
@@ -27,7 +30,10 @@ public class StatsService : IStatsService
             TotalCalories: raw.TotalCalories,
             DailyCalorieLimit: raw.DailyCalorieLimit,
             RemainingCalories: remaining,
-            Entries: raw.Entries
+            Entries: raw.Entries,
+            TotalProtein: totalProtein,
+            TotalFat: totalFat,
+            TotalCarbohydrates: totalCarbs
         );
     }
 

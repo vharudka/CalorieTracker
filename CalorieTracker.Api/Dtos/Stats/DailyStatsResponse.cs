@@ -8,5 +8,8 @@ public record DailyStatsResponse
     int TotalCalories,
     int DailyCalorieLimit,
     int RemainingCalories,
-    IReadOnlyList<FoodEntryResponse> Entries
+    IReadOnlyList<FoodEntryResponse> Entries,
+    int TotalProtein,
+    int TotalFat,
+    int TotalCarbohydrates
 );
